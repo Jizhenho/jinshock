@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JinShock FDE | Fractional Development Engineering for SMBs</title>
+    <meta
+      name="description"
+      content="Hourly Fractional Development Engineering services for US/EU small and medium businesses. Fast technical execution, pragmatic problem-solving, and flexible support without full-time overhead."
+    />
+    <style>
+      :root {
+        --bg: #0b1020;
+        --card: #121a33;
+        --muted: #99a7c2;
+        --text: #e9eefc;
+        --primary: #73a1ff;
+        --primary-2: #4f7cf4;
+        --ok: #73d9a0;
+        --line: #263152;
+      }
+
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: Inter, ui-sans-serif, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+        background: radial-gradient(900px 500px at 80% -10%, #1e2b57 0%, transparent 60%), var(--bg);
+        color: var(--text);
+        line-height: 1.6;
+      }
+
+      .container { max-width: 1080px; margin: 0 auto; padding: 28px 20px 72px; }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 40px;
+      }
+      .brand { font-weight: 800; letter-spacing: 0.4px; font-size: 1.1rem; }
+      .brand span { color: var(--primary); }
+      .badge {
+        border: 1px solid var(--line);
+        color: var(--muted);
+        padding: 8px 12px;
+        border-radius: 999px;
+        font-size: 0.82rem;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 24px;
+        align-items: stretch;
+      }
+      .card {
+        background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 28px;
+      }
+      h1 {
+        margin: 8px 0 16px;
+        line-height: 1.2;
+        font-size: clamp(1.8rem, 4vw, 3rem);
+      }
+      .lead { color: #c8d4ef; font-size: 1.05rem; margin-bottom: 18px; }
+      .chips { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0 26px; }
+      .chip {
+        padding: 8px 12px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        color: var(--muted);
+        font-size: 0.86rem;
+      }
+
+      .actions { display: flex; gap: 12px; flex-wrap: wrap; }
+      .btn {
+        border: none;
+        border-radius: 12px;
+        padding: 12px 16px;
+        font-weight: 650;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+      }
+      .btn-primary { background: var(--primary); color: #08122f; }
+      .btn-primary:hover { background: var(--primary-2); color: #fff; }
+      .btn-ghost {
+        border: 1px solid var(--line);
+        color: var(--text);
+        background: transparent;
+      }
+
+      .side h3 { margin-top: 0; }
+      .kpis { list-style: none; padding: 0; margin: 12px 0 0; }
+      .kpis li { padding: 10px 0; border-bottom: 1px dashed var(--line); }
+      .kpis li:last-child { border-bottom: none; }
+      .kpis strong { color: var(--ok); }
+
+      section { margin-top: 28px; }
+      h2 { margin: 0 0 12px; font-size: 1.45rem; }
+      .grid3 {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+      }
+      .item {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 16px;
+      }
+      .item h4 { margin: 0 0 6px; }
+      .muted { color: var(--muted); }
+
+      .process {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+      }
+      .step {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 14px;
+      }
+      .step small { color: var(--muted); display: block; margin-bottom: 6px; }
+
+      .cta {
+        text-align: center;
+        padding: 28px;
+        border: 1px solid #3450a4;
+        border-radius: 18px;
+        background: linear-gradient(180deg, rgba(115,161,255,0.16), rgba(115,161,255,0.05));
+      }
+
+      footer {
+        margin-top: 26px;
+        color: var(--muted);
+        font-size: 0.9rem;
+        text-align: center;
+      }
+
+      @media (max-width: 900px) {
+        .hero { grid-template-columns: 1fr; }
+        .grid3 { grid-template-columns: 1fr; }
+        .process { grid-template-columns: 1fr 1fr; }
+      }
+      @media (max-width: 540px) {
+        .process { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="container">
+      <header class="topbar">
+        <div class="brand">Jin<span>Shock</span> FDE</div>
+        <div class="badge">Hourly • Flexible • SMB-focused</div>
+      </header>
+
+      <section class="hero">
+        <article class="card">
+          <p class="muted">Fractional Development Engineering for US & EU SMBs</p>
+          <h1>Ship faster with an <span style="color: var(--primary)">hourly FDE partner</span> that solves real business bottlenecks.</h1>
+          <p class="lead">
+            We provide on-demand engineering execution for small and medium businesses—without the cost and delay of full-time hiring.
+            From urgent fixes to workflow automation, we turn technical blockers into measurable outcomes.
+          </p>
+
+          <div class="chips">
+            <span class="chip">Hourly engagement</span>
+            <span class="chip">No long-term lock-in</span>
+            <span class="chip">US/EU business hours overlap</span>
+            <span class="chip">Startup & SMB friendly</span>
+          </div>
+
+          <div class="actions">
+            <a class="btn btn-primary" href="mailto:hello@jinshock.com?subject=Book%20a%20Discovery%20Call">Book a 30-min discovery call</a>
+            <a class="btn btn-ghost" href="#services">See service scope</a>
+          </div>
+        </article>
+
+        <aside class="card side">
+          <h3>Why SMB teams hire JinShock FDE</h3>
+          <ul class="kpis">
+            <li><strong>0→1 speed</strong><br/><span class="muted">Move from backlog to shipped solution in days, not quarters.</span></li>
+            <li><strong>Flexible spend</strong><br/><span class="muted">Pay only for execution hours you actually need.</span></li>
+            <li><strong>Business-first approach</strong><br/><span class="muted">Prioritize ROI, risk reduction, and operational impact.</span></li>
+          </ul>
+        </aside>
+      </section>
+
+      <section id="services" class="card">
+        <h2>Service Scope (Hourly)</h2>
+        <div class="grid3">
+          <div class="item">
+            <h4>Rapid Problem Solving</h4>
+            <p class="muted">Debug production incidents, remove blockers, and stabilize key workflows quickly.</p>
+          </div>
+          <div class="item">
+            <h4>Workflow Automation</h4>
+            <p class="muted">Automate repetitive operations across CRM, support, reporting, and internal tools.</p>
+          </div>
+          <div class="item">
+            <h4>Product & Integration Delivery</h4>
+            <p class="muted">Build practical features, APIs, and integrations that directly support revenue and efficiency.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>How We Work</h2>
+        <div class="process">
+          <div class="step">
+            <small>Step 1</small>
+            <strong>Discovery</strong>
+            <div class="muted">Understand business pain, current stack, and urgency.</div>
+          </div>
+          <div class="step">
+            <small>Step 2</small>
+            <strong>Scope by Hours</strong>
+            <div class="muted">Estimate effort and propose a transparent hourly execution plan.</div>
+          </div>
+          <div class="step">
+            <small>Step 3</small>
+            <strong>Execution</strong>
+            <div class="muted">Deliver in short cycles with visible progress and clear communication.</div>
+          </div>
+          <div class="step">
+            <small>Step 4</small>
+            <strong>Handover</strong>
+            <div class="muted">Document outcomes, next actions, and optional ongoing support.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="cta">
+        <h2 style="margin-top:0;">Need engineering firepower without full-time overhead?</h2>
+        <p>Tell us your top 1–2 blockers. We’ll propose an hourly action plan within 24 hours.</p>
+        <a class="btn btn-primary" href="mailto:hello@jinshock.com?subject=SMB%20Hourly%20FDE%20Inquiry">Start with JinShock FDE</a>
+      </section>
+
+      <footer>
+        © <span id="year"></span> JinShock FDE. Built for small & medium businesses in North America and Europe.
+      </footer>
+    </main>
+
+    <script>
+      document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>
