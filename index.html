@@ -1,0 +1,1085 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>JinShock FDE — Forward Deployed Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Serif+TC:wght@400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #F6F5F1;         /* warm off-white */
+    --bg-2:#EFEDE6;
+    --ink:#0E1513;         /* deep ink */
+    --ink-2:#394642;
+    --muted:#6B7571;
+    --rule:#D9D5CA;
+    --rule-2:#E4E0D4;
+    --paper:#FFFFFF;
+    --accent:#0F5132;      /* emerald */
+    --accent-2:#1F8A5A;
+    --accent-wash:#E7EFE7;
+    --radius: 14px;
+    --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    --serif: 'Instrument Serif', 'Noto Serif TC', Georgia, serif;
+    --serif-zh: 'Noto Serif TC', 'Instrument Serif', Georgia, serif;
+    --sans: 'Inter', 'Noto Sans TC', system-ui, -apple-system, Segoe UI, sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family: var(--sans);
+    font-size:16px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  html[lang^="zh"] body{ font-family: 'Noto Sans TC', var(--sans); }
+
+  a{color:inherit}
+  button{font:inherit;color:inherit}
+
+  /* Layout */
+  .wrap{max-width:1200px;margin:0 auto;padding:0 28px}
+  @media (max-width:640px){.wrap{padding:0 20px}}
+
+  /* Nav */
+  .nav{
+    position:sticky; top:0; z-index:50;
+    backdrop-filter: saturate(140%) blur(10px);
+    background: color-mix(in oklab, var(--bg) 82%, transparent);
+    border-bottom:1px solid var(--rule-2);
+  }
+  .nav-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    height:64px;
+  }
+  .brand{display:flex; align-items:center; gap:10px; font-weight:600; letter-spacing:-.01em;}
+  .brand-mark{
+    width:22px;height:22px;border-radius:6px;
+    background: var(--ink);
+    position:relative;
+    display:inline-block;
+  }
+  .brand-mark::after{
+    content:"";position:absolute; inset:6px 6px auto auto;
+    width:6px;height:6px;border-radius:50%;
+    background:var(--accent-2);
+  }
+  .brand-name{font-size:15px}
+  .brand-name em{font-style:normal; color:var(--muted); font-weight:500;}
+
+  .nav-links{display:flex; gap:28px; align-items:center;}
+  .nav-links a{
+    font-size:14px; color:var(--ink-2); text-decoration:none;
+    transition:color .15s ease;
+  }
+  .nav-links a:hover{color:var(--ink)}
+  @media (max-width:780px){ .nav-links .nav-link{display:none} }
+
+  /* Language toggle */
+  .lang{
+    display:inline-flex; align-items:center;
+    border:1px solid var(--rule); border-radius:999px;
+    padding:3px; background:var(--paper);
+    font-family:var(--mono); font-size:11px; letter-spacing:.04em;
+  }
+  .lang button{
+    background:transparent; border:0; cursor:pointer;
+    padding:5px 10px; border-radius:999px; color:var(--muted);
+    transition: all .15s ease;
+  }
+  .lang button.is-active{
+    background:var(--ink); color:var(--bg);
+  }
+
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:11px 18px; border-radius:999px;
+    font-size:14px; font-weight:500;
+    text-decoration:none; border:1px solid transparent;
+    transition:all .2s ease;
+    white-space:nowrap;
+  }
+  .btn-primary{ background:var(--ink); color:var(--bg); }
+  .btn-primary:hover{ background:var(--accent); }
+  .btn-ghost{ border-color:var(--rule); color:var(--ink); background:transparent; }
+  .btn-ghost:hover{ border-color:var(--ink); }
+  .btn .arrow{
+    display:inline-block; transition:transform .25s ease;
+  }
+  .btn:hover .arrow{ transform: translateX(3px); }
+
+  /* Hero */
+  .hero{padding: 72px 0 88px; position:relative;}
+  .hero-grid{
+    display:grid; grid-template-columns: 1.15fr .85fr;
+    gap:64px; align-items:center;
+  }
+  @media (max-width:900px){ .hero-grid{grid-template-columns:1fr; gap:44px} }
+
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:10px;
+    font-family:var(--mono); font-size:11px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--muted);
+    padding:7px 12px; border:1px solid var(--rule);
+    border-radius:999px; background:var(--paper);
+  }
+  .eyebrow .dot{
+    width:6px;height:6px;border-radius:50%;
+    background:var(--accent-2);
+    box-shadow:0 0 0 3px color-mix(in oklab, var(--accent-2) 25%, transparent);
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{opacity:1}
+    50%{opacity:.55}
+  }
+
+  h1.display{
+    font-family: var(--serif);
+    font-weight:400;
+    font-size: clamp(44px, 6.2vw, 82px);
+    line-height: 1.02;
+    letter-spacing:-.02em;
+    margin: 22px 0 22px;
+    color:var(--ink);
+    text-wrap: balance;
+  }
+  html[lang^="zh"] h1.display{
+    font-family: var(--serif-zh);
+    font-weight:500;
+    font-size: clamp(36px, 5.2vw, 66px);
+    line-height:1.15;
+    letter-spacing:-.01em;
+  }
+  h1.display em{
+    font-style:italic;
+    color:var(--accent);
+  }
+  html[lang^="zh"] h1.display em{
+    font-style:normal;
+    color:var(--accent);
+    position:relative;
+  }
+
+  .lede{
+    font-size:17px; color:var(--ink-2); max-width: 52ch;
+    line-height:1.6;
+  }
+  html[lang^="zh"] .lede{ font-size:16px; line-height:1.85; }
+
+  .hero-cta{display:flex; gap:12px; margin-top:34px; flex-wrap:wrap}
+
+  .hero-meta{
+    display:flex; gap:28px; margin-top:46px; flex-wrap:wrap;
+    font-size:13px; color:var(--muted);
+  }
+  .hero-meta .m{display:flex; gap:8px; align-items:center;}
+  .hero-meta .m::before{
+    content:""; width:4px;height:4px;border-radius:50%;
+    background:var(--accent-2);
+  }
+
+  /* Hero visual — abstract engineering diagram */
+  .hero-visual{
+    position:relative;
+    aspect-ratio: 1/1.02;
+    max-width:480px;
+    margin-left:auto;
+    border:1px solid var(--rule);
+    border-radius: var(--radius);
+    background:
+      linear-gradient(180deg, var(--paper) 0%, var(--bg-2) 100%);
+    overflow:hidden;
+    padding:24px;
+    display:flex; flex-direction:column;
+  }
+  .hv-header{
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:var(--mono); font-size:10px; color:var(--muted);
+    letter-spacing:.08em; text-transform:uppercase;
+    padding-bottom:14px; border-bottom:1px solid var(--rule-2);
+  }
+  .hv-dots{display:flex; gap:5px}
+  .hv-dots span{width:8px;height:8px;border-radius:50%;background:var(--rule)}
+  .hv-dots span:nth-child(1){background:#D97D6B}
+  .hv-dots span:nth-child(2){background:#E0B86B}
+  .hv-dots span:nth-child(3){background:var(--accent-2)}
+
+  .hv-body{
+    flex:1; padding:18px 4px 4px;
+    display:flex; flex-direction:column; gap:14px;
+  }
+  .hv-row{
+    display:grid; grid-template-columns: 54px 1fr 64px;
+    gap:12px; align-items:center; font-size:12px;
+  }
+  .hv-row .t{color:var(--muted); font-family:var(--mono); font-size:10.5px}
+  .hv-row .label{color:var(--ink); font-weight:500; font-size:13px}
+  .hv-row .bar{
+    position:relative; height:6px; border-radius:999px;
+    background:var(--rule-2); overflow:hidden;
+  }
+  .hv-row .bar i{
+    position:absolute; inset:0 auto 0 0;
+    background: linear-gradient(90deg, var(--accent-2), var(--accent));
+    border-radius:inherit;
+    transform-origin:left;
+    animation: fill 2.8s cubic-bezier(.2,.7,.2,1) infinite;
+  }
+  .hv-row .v{
+    font-family:var(--mono); font-size:10.5px; color:var(--ink);
+    text-align:right;
+  }
+  @keyframes fill{
+    0%{ transform: scaleX(0);}
+    60%,100%{ transform: scaleX(var(--w, .6));}
+  }
+
+  .hv-footer{
+    margin-top:auto; padding-top:16px;
+    border-top:1px solid var(--rule-2);
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:var(--mono); font-size:10px;
+    color:var(--muted); letter-spacing:.08em; text-transform:uppercase;
+  }
+  .hv-footer .status{
+    display:inline-flex; gap:6px; align-items:center; color:var(--accent);
+  }
+  .hv-footer .status::before{
+    content:""; width:6px;height:6px;border-radius:50%;
+    background:var(--accent-2); box-shadow:0 0 0 3px var(--accent-wash);
+  }
+
+  /* Section */
+  .section{padding: 80px 0; border-top:1px solid var(--rule-2);}
+  .section-head{
+    display:grid; grid-template-columns: 200px 1fr; gap:40px;
+    align-items:start; margin-bottom:48px;
+  }
+  @media (max-width:780px){
+    .section-head{grid-template-columns:1fr; gap:16px;}
+  }
+  .section-kicker{
+    font-family:var(--mono); font-size:11px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--muted);
+    padding-top:8px;
+  }
+  .section-kicker .num{ color:var(--accent); margin-right:8px; }
+  .section-title{
+    font-family:var(--serif); font-weight:400;
+    font-size: clamp(32px, 4vw, 44px);
+    line-height:1.1; letter-spacing:-.015em;
+    margin:0 0 14px; text-wrap:balance;
+  }
+  html[lang^="zh"] .section-title{
+    font-family:var(--serif-zh); font-weight:500;
+    font-size: clamp(28px, 3.4vw, 38px);
+    line-height:1.25;
+  }
+  .section-sub{
+    color:var(--ink-2); font-size:17px; max-width: 58ch; margin:0;
+  }
+  html[lang^="zh"] .section-sub{font-size:15.5px; line-height:1.8}
+
+  /* Services */
+  .services{
+    display:grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background:var(--rule-2);
+    border:1px solid var(--rule-2); border-radius: var(--radius);
+    overflow:hidden;
+  }
+  @media (max-width:780px){ .services{grid-template-columns:1fr} }
+  .service{
+    background:var(--paper);
+    padding: 32px 28px;
+    display:flex; flex-direction:column;
+    min-height:260px;
+    position:relative;
+    transition: background .25s ease;
+  }
+  .service:hover{ background: var(--bg); }
+  .service .idx{
+    font-family:var(--mono); font-size:11px;
+    color:var(--muted); letter-spacing:.1em;
+  }
+  .service h3{
+    font-family:var(--serif); font-weight:400;
+    font-size: 26px; line-height:1.15;
+    letter-spacing:-.01em;
+    margin: 22px 0 12px;
+  }
+  html[lang^="zh"] .service h3{
+    font-family:var(--serif-zh); font-weight:500; font-size:22px;
+  }
+  .service p{ color:var(--ink-2); font-size:14.5px; margin:0 0 22px; }
+  html[lang^="zh"] .service p{font-size:14px; line-height:1.8}
+  .service ul{
+    list-style:none; padding:0; margin: auto 0 0;
+    font-family:var(--mono); font-size:11.5px;
+    color:var(--muted); letter-spacing:.02em;
+    display:flex; flex-direction:column; gap:6px;
+    padding-top:18px; border-top:1px solid var(--rule-2);
+  }
+  .service ul li::before{
+    content:"—"; margin-right:8px; color:var(--accent);
+  }
+  html[lang^="zh"] .service ul{font-family: var(--sans); font-size:12.5px;}
+
+  /* Process */
+  .process{
+    display:grid; grid-template-columns: repeat(4, 1fr);
+    gap: 28px;
+    counter-reset: step;
+  }
+  @media (max-width:900px){.process{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:560px){.process{grid-template-columns:1fr}}
+  .step{
+    position:relative;
+    padding-top:24px;
+    border-top:1px solid var(--ink);
+  }
+  .step .n{
+    position:absolute; top:-11px; left:0;
+    background:var(--bg); padding-right:10px;
+    font-family:var(--mono); font-size:11px; color:var(--muted);
+    letter-spacing:.1em;
+  }
+  .step h4{
+    font-family:var(--serif); font-weight:400;
+    font-size:24px; margin:6px 0 10px; letter-spacing:-.01em;
+  }
+  html[lang^="zh"] .step h4{font-family:var(--serif-zh);font-weight:500;font-size:20px}
+  .step p{ color:var(--ink-2); font-size:14.5px; margin:0 }
+  html[lang^="zh"] .step p{font-size:14px; line-height:1.8}
+
+  /* Value props */
+  .values{
+    display:grid; grid-template-columns: repeat(3, 1fr);
+    gap: 48px 56px;
+  }
+  @media (max-width:780px){.values{grid-template-columns:1fr; gap:36px}}
+  .value .big{
+    font-family:var(--serif); font-size: 64px;
+    line-height:1; color:var(--accent);
+    letter-spacing:-.02em;
+  }
+  html[lang^="zh"] .value .big{font-family:var(--serif)}
+  .value .big sup{ font-size:24px; vertical-align:top; margin-left:2px; color:var(--accent-2);}
+  .value h5{
+    font-size:16px; font-weight:600; margin: 18px 0 8px;
+  }
+  .value p{ color:var(--ink-2); font-size:14.5px; margin:0 }
+  html[lang^="zh"] .value p{font-size:14px; line-height:1.8}
+
+  /* FAQ */
+  .faq{border-top:1px solid var(--rule);}
+  details{
+    border-bottom:1px solid var(--rule);
+    padding: 22px 0;
+    cursor:pointer;
+  }
+  details summary{
+    list-style:none;
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:var(--serif); font-size:22px; font-weight:400;
+    letter-spacing:-.01em;
+    outline:none;
+  }
+  html[lang^="zh"] details summary{font-family:var(--serif-zh); font-weight:500; font-size:19px}
+  details summary::-webkit-details-marker{display:none}
+  details summary::after{
+    content:"+"; font-family:var(--mono); color:var(--muted);
+    font-size:22px; transition: transform .25s ease;
+    line-height:1;
+  }
+  details[open] summary::after{ content:"–"; color:var(--accent); }
+  details .answer{
+    color:var(--ink-2); font-size:15px; line-height:1.7;
+    padding-top:14px; max-width: 70ch;
+  }
+  html[lang^="zh"] details .answer{font-size:14.5px; line-height:1.85}
+
+  /* CTA */
+  .cta-band{
+    margin-top: 40px;
+    background: var(--ink);
+    color: var(--bg);
+    border-radius: var(--radius);
+    padding: 64px 56px;
+    display:grid; grid-template-columns: 1.1fr .9fr; gap:40px;
+    align-items:center;
+    position:relative; overflow:hidden;
+  }
+  @media (max-width:780px){
+    .cta-band{grid-template-columns:1fr; padding:40px 28px}
+  }
+  .cta-band::before{
+    content:""; position:absolute; inset:0;
+    background:
+      radial-gradient(800px 300px at 100% 120%, color-mix(in oklab, var(--accent-2) 22%, transparent), transparent 60%);
+    pointer-events:none;
+  }
+  .cta-band h3{
+    font-family:var(--serif); font-weight:400;
+    font-size: clamp(32px, 3.6vw, 44px); line-height:1.1;
+    letter-spacing:-.015em;
+    margin:0 0 14px; position:relative;
+  }
+  html[lang^="zh"] .cta-band h3{font-family:var(--serif-zh); font-weight:500; font-size:clamp(26px,3vw,34px); line-height:1.25}
+  .cta-band p{
+    color: color-mix(in oklab, var(--bg) 72%, var(--muted));
+    margin:0; font-size:15px; max-width:46ch; position:relative;
+  }
+  .cta-actions{display:flex; gap:12px; flex-wrap:wrap; justify-content:flex-end; position:relative}
+  @media (max-width:780px){.cta-actions{justify-content:flex-start}}
+  .cta-band .btn-primary{ background:var(--bg); color:var(--ink); }
+  .cta-band .btn-primary:hover{ background:var(--accent-2); color:var(--bg);}
+  .cta-band .btn-ghost{ border-color: color-mix(in oklab, var(--bg) 30%, transparent); color:var(--bg);}
+  .cta-band .btn-ghost:hover{ border-color: var(--bg); }
+
+  /* Footer */
+  footer{
+    padding: 56px 0 40px;
+    border-top:1px solid var(--rule-2);
+    margin-top:80px;
+    color:var(--muted); font-size:13px;
+  }
+  .foot{
+    display:grid; grid-template-columns: 1.2fr 1fr 1fr 1fr;
+    gap: 40px; margin-bottom:40px;
+  }
+  @media (max-width:780px){.foot{grid-template-columns:1fr 1fr; gap:32px}}
+  .foot h6{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--ink); margin:0 0 14px; font-weight:500;
+  }
+  .foot ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+  .foot a{text-decoration:none; color:var(--ink-2)}
+  .foot a:hover{color:var(--accent)}
+  .foot-bottom{
+    display:flex; justify-content:space-between; align-items:center;
+    padding-top: 24px; border-top:1px solid var(--rule-2);
+    font-family:var(--mono); font-size:11px; letter-spacing:.04em;
+    flex-wrap:wrap; gap:12px;
+  }
+
+  /* Scroll reveal */
+  [data-reveal]{
+    opacity:0; transform: translateY(14px);
+    transition: opacity .7s ease, transform .7s ease;
+  }
+  [data-reveal].in{ opacity:1; transform:none; }
+
+  /* Subtle hover for services when hovering one */
+  .services:hover .service:not(:hover){ opacity:.72; }
+  .service{transition: opacity .25s ease, background .25s ease;}
+</style>
+</head>
+<body>
+
+<!-- ====== NAV ====== -->
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a href="#" class="brand" aria-label="JinShock FDE">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-name">JinShock <em data-i18n="brand.tag">FDE</em></span>
+    </a>
+    <nav class="nav-links">
+      <a href="#services" class="nav-link" data-i18n="nav.services">Services</a>
+      <a href="#process" class="nav-link" data-i18n="nav.process">How we work</a>
+      <a href="#why" class="nav-link" data-i18n="nav.why">Why us</a>
+      <a href="#faq" class="nav-link" data-i18n="nav.faq">FAQ</a>
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang="zh" class="is-active">中</button>
+        <button type="button" data-lang="en">EN</button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ====== HERO ====== -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <span class="eyebrow">
+          <span class="dot" aria-hidden="true"></span>
+          <span data-i18n="hero.eyebrow">Hourly · Flexible · SMB-focused</span>
+        </span>
+
+        <h1 class="display" data-i18n-html="hero.h1">
+          更快交付,<br/>解決真正卡住業務的<em>技術瓶頸</em>。
+        </h1>
+
+        <p class="lede" data-i18n="hero.lede">
+          我們為歐美中小企業提供按時計費的資訊工程能力——免去全職雇用的成本與等待,從緊急修復到流程自動化,把技術阻礙轉為可衡量的成果。
+        </p>
+
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="mailto:hello@jinshock.com?subject=Book%20a%20Discovery%20Call">
+            <span data-i18n="hero.cta.primary">預約 30 分鐘討論</span>
+            <span class="arrow" aria-hidden="true">→</span>
+          </a>
+          <a class="btn btn-ghost" href="#services">
+            <span data-i18n="hero.cta.secondary">服務範圍</span>
+          </a>
+        </div>
+
+        <div class="hero-meta">
+          <span class="m" data-i18n="hero.meta.1">按時計費</span>
+          <span class="m" data-i18n="hero.meta.2">無長期綁約</span>
+          <span class="m" data-i18n="hero.meta.3">美/歐工時重疊</span>
+          <span class="m" data-i18n="hero.meta.4">新創與中小企業友善</span>
+        </div>
+      </div>
+
+      <!-- Abstract visual: "execution dashboard" -->
+      <div class="hero-visual" aria-hidden="true">
+        <div class="hv-header">
+          <span>fde://execution</span>
+          <span class="hv-dots"><span></span><span></span><span></span></span>
+        </div>
+        <div class="hv-body">
+          <div class="hv-row" style="--w:.86">
+            <span class="t">01</span>
+            <div>
+              <div class="label" data-i18n="hv.1.label">Ticket triage</div>
+              <div class="bar"><i style="--w:.86"></i></div>
+            </div>
+            <span class="v">2.4h</span>
+          </div>
+          <div class="hv-row">
+            <span class="t">02</span>
+            <div>
+              <div class="label" data-i18n="hv.2.label">Incident fix</div>
+              <div class="bar"><i style="--w:.62"></i></div>
+            </div>
+            <span class="v">shipped</span>
+          </div>
+          <div class="hv-row">
+            <span class="t">03</span>
+            <div>
+              <div class="label" data-i18n="hv.3.label">CRM automation</div>
+              <div class="bar"><i style="--w:.74"></i></div>
+            </div>
+            <span class="v">74%</span>
+          </div>
+          <div class="hv-row">
+            <span class="t">04</span>
+            <div>
+              <div class="label" data-i18n="hv.4.label">API integration</div>
+              <div class="bar"><i style="--w:.48"></i></div>
+            </div>
+            <span class="v">in progress</span>
+          </div>
+          <div class="hv-row">
+            <span class="t">05</span>
+            <div>
+              <div class="label" data-i18n="hv.5.label">Weekly handover</div>
+              <div class="bar"><i style="--w:.92"></i></div>
+            </div>
+            <span class="v">Fri</span>
+          </div>
+        </div>
+        <div class="hv-footer">
+          <span>cycle · week 14</span>
+          <span class="status" data-i18n="hv.status">shipping</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ====== SERVICES ====== -->
+<section id="services" class="section">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <div class="section-kicker"><span class="num">01</span><span data-i18n="sec.services.kicker">Services</span></div>
+      <div>
+        <h2 class="section-title" data-i18n-html="sec.services.title">為中小企業而生的<em>按時計費</em>工程服務</h2>
+        <p class="section-sub" data-i18n="sec.services.sub">我們不接整季承包,不推大型改造。專注在一週內能被看見、能被衡量的交付。</p>
+      </div>
+    </div>
+
+    <div class="services" data-reveal>
+      <article class="service">
+        <span class="idx">01 / Rapid Fix</span>
+        <h3 data-i18n="svc.1.title">快速問題排解</h3>
+        <p data-i18n="svc.1.desc">排除正式環境事故、解除開發卡點、穩定關鍵流程,先把火滅掉。</p>
+        <ul>
+          <li data-i18n="svc.1.b1">Production incident</li>
+          <li data-i18n="svc.1.b2">Legacy unblock</li>
+          <li data-i18n="svc.1.b3">Performance triage</li>
+        </ul>
+      </article>
+
+      <article class="service">
+        <span class="idx">02 / Automation</span>
+        <h3 data-i18n="svc.2.title">流程自動化</h3>
+        <p data-i18n="svc.2.desc">把 CRM、客服、報表、內部工具之間的重複操作自動化,讓團隊從手工勞動中釋放出來。</p>
+        <ul>
+          <li data-i18n="svc.2.b1">CRM &amp; support ops</li>
+          <li data-i18n="svc.2.b2">Reporting pipelines</li>
+          <li data-i18n="svc.2.b3">Internal tooling</li>
+        </ul>
+      </article>
+
+      <article class="service">
+        <span class="idx">03 / Delivery</span>
+        <h3 data-i18n="svc.3.title">產品與整合交付</h3>
+        <p data-i18n="svc.3.desc">打造直接支撐營收與效率的功能、API 與第三方整合——務實、夠用、可維護。</p>
+        <ul>
+          <li data-i18n="svc.3.b1">Feature shipping</li>
+          <li data-i18n="svc.3.b2">API &amp; webhooks</li>
+          <li data-i18n="svc.3.b3">3rd-party integration</li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ====== PROCESS ====== -->
+<section id="process" class="section">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <div class="section-kicker"><span class="num">02</span><span data-i18n="sec.process.kicker">How we work</span></div>
+      <div>
+        <h2 class="section-title" data-i18n-html="sec.process.title">一個短、透明、<em>可驗收</em>的合作循環。</h2>
+        <p class="section-sub" data-i18n="sec.process.sub">從第一次通話到交付結束,你隨時都知道我們在做什麼、還剩多少小時。</p>
+      </div>
+    </div>
+
+    <div class="process" data-reveal>
+      <div class="step">
+        <span class="n">STEP 01</span>
+        <h4 data-i18n="step.1.title">探索</h4>
+        <p data-i18n="step.1.desc">了解業務痛點、現有技術堆疊與緊急程度,判斷是否真的是我們能解的問題。</p>
+      </div>
+      <div class="step">
+        <span class="n">STEP 02</span>
+        <h4 data-i18n="step.2.title">時數估算</h4>
+        <p data-i18n="step.2.desc">以小時為單位估算工作量,提出一份透明、可對照的執行計畫。</p>
+      </div>
+      <div class="step">
+        <span class="n">STEP 03</span>
+        <h4 data-i18n="step.3.title">執行</h4>
+        <p data-i18n="step.3.desc">以短週期交付,每週能看到實際進展與可用成果,而不是只有週報。</p>
+      </div>
+      <div class="step">
+        <span class="n">STEP 04</span>
+        <h4 data-i18n="step.4.title">移交</h4>
+        <p data-i18n="step.4.desc">留下文件與下一步建議,必要時提供後續維運支援,讓你的團隊能接手。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== VALUES / WHY ====== -->
+<section id="why" class="section">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <div class="section-kicker"><span class="num">03</span><span data-i18n="sec.why.kicker">Why JinShock</span></div>
+      <div>
+        <h2 class="section-title" data-i18n-html="sec.why.title">用<em>更少的承諾</em>,換取更高的執行確定性。</h2>
+        <p class="section-sub" data-i18n="sec.why.sub">你不需要多聘一位工程師,也不需要等三個月的招募循環。你只需要有人把事情做完。</p>
+      </div>
+    </div>
+
+    <div class="values" data-reveal>
+      <div class="value">
+        <div class="big">0<sup>→</sup>1</div>
+        <h5 data-i18n="val.1.title">天數而非季度</h5>
+        <p data-i18n="val.1.desc">把積壓需求從 backlog 推到 shipped,以天為單位,不是以 quarter 為單位。</p>
+      </div>
+      <div class="value">
+        <div class="big">24<sup>h</sup></div>
+        <h5 data-i18n="val.2.title">一日內回覆計畫</h5>
+        <p data-i18n="val.2.desc">告訴我們最卡的一兩件事,我們會在 24 小時內提出可執行的時數方案。</p>
+      </div>
+      <div class="value">
+        <div class="big">1:1</div>
+        <h5 data-i18n="val.3.title">商業優先</h5>
+        <p data-i18n="val.3.desc">每一小時都對應到投資回報、風險降低或營運影響——我們不為技術炫技。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== FAQ ====== -->
+<section id="faq" class="section">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <div class="section-kicker"><span class="num">04</span><span data-i18n="sec.faq.kicker">FAQ</span></div>
+      <div>
+        <h2 class="section-title" data-i18n="sec.faq.title">常見問題</h2>
+        <p class="section-sub" data-i18n="sec.faq.sub">選擇按時計費的夥伴前,這些是你該先釐清的事。</p>
+      </div>
+    </div>
+
+    <div class="faq" data-reveal>
+      <details open>
+        <summary data-i18n="faq.1.q">合作的最小規模是多少?</summary>
+        <div class="answer" data-i18n="faq.1.a">通常從 10 小時起,適合一次性的修復或小型自動化;若是整合或功能交付,多半落在 40–80 小時的區間。無最低月費、無長期綁約。</div>
+      </details>
+      <details>
+        <summary data-i18n="faq.2.q">你們在哪些技術堆疊上工作?</summary>
+        <div class="answer" data-i18n="faq.2.a">主流 Web 與雲端技術:Node、Python、TypeScript、Postgres、AWS/GCP、常見 SaaS 的 API(HubSpot、Stripe、Notion、Zapier、Airtable 等)。不熟的技術會在探索階段直接告訴你。</div>
+      </details>
+      <details>
+        <summary data-i18n="faq.3.q">時區怎麼運作?</summary>
+        <div class="answer" data-i18n="faq.3.a">我們與美東、美西、中西歐商務時段都有每日重疊視窗。緊急案件可安排同步會議,一般執行以非同步方式進行,確保你的團隊不被會議綁架。</div>
+      </details>
+      <details>
+        <summary data-i18n="faq.4.q">時數如何追蹤與回報?</summary>
+        <div class="answer" data-i18n="faq.4.a">每週提供時數明細與對應交付項目,任何異常在超出預估 15% 前會先告知,絕不事後追加費用。</div>
+      </details>
+      <details>
+        <summary data-i18n="faq.5.q">有 NDA 與資安要求嗎?</summary>
+        <div class="answer" data-i18n="faq.5.a">可簽署客戶 NDA 或採用我們的標準版本;憑證以最小權限原則授權,專案結束後清除。如需符合 SOC2/GDPR 對應流程,請在探索階段告知。</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ====== CTA BAND ====== -->
+<section class="section" style="padding-top:40px;border:0">
+  <div class="wrap">
+    <div class="cta-band">
+      <div>
+        <h3 data-i18n-html="cta.title">不想承擔全職工程成本,<br/>又需要技術火力?</h3>
+        <p data-i18n="cta.sub">告訴我們你最卡的一到兩件事。我們會在 24 小時內回覆一份按時數計算的行動方案。</p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn btn-ghost" href="mailto:hello@jinshock.com?subject=SMB%20Hourly%20FDE%20Inquiry">
+          <span data-i18n="cta.secondary">寄信給我們</span>
+        </a>
+        <a class="btn btn-primary" href="mailto:hello@jinshock.com?subject=Book%20a%20Discovery%20Call">
+          <span data-i18n="cta.primary">開始合作</span>
+          <span class="arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ====== FOOTER ====== -->
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <div class="brand" style="margin-bottom:12px">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span class="brand-name">JinShock <em>FDE</em></span>
+        </div>
+        <p style="margin:0; color:var(--ink-2); font-size:13.5px; max-width:36ch" data-i18n="foot.tag">
+          為北美與歐洲中小企業而生的按時計費工程夥伴。
+        </p>
+      </div>
+      <div>
+        <h6 data-i18n="foot.services">Services</h6>
+        <ul>
+          <li><a href="#services" data-i18n="svc.1.title">快速問題排解</a></li>
+          <li><a href="#services" data-i18n="svc.2.title">流程自動化</a></li>
+          <li><a href="#services" data-i18n="svc.3.title">產品與整合交付</a></li>
+        </ul>
+      </div>
+      <div>
+        <h6 data-i18n="foot.company">Company</h6>
+        <ul>
+          <li><a href="#process" data-i18n="nav.process">合作流程</a></li>
+          <li><a href="#why" data-i18n="nav.why">為何選我們</a></li>
+          <li><a href="#faq" data-i18n="nav.faq">常見問題</a></li>
+        </ul>
+      </div>
+      <div>
+        <h6 data-i18n="foot.contact">Contact</h6>
+        <ul>
+          <li><a href="mailto:hello@jinshock.com">hello@jinshock.com</a></li>
+          <li><span data-i18n="foot.hours">美/歐工時重疊</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 JINSHOCK FDE</span>
+      <span data-i18n="foot.built">Built for SMBs in NA &amp; EU</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ====== i18n & interactions ====== -->
+<script>
+(function(){
+  const dict = {
+    zh: {
+      "brand.tag":"FDE",
+      "nav.services":"服務",
+      "nav.process":"合作流程",
+      "nav.why":"為何選我們",
+      "nav.faq":"常見問題",
+
+      "hero.eyebrow":"按時計費 · 靈活 · 中小企業導向",
+      "hero.h1":"更快交付,<br/>解決真正卡住業務的<em>技術瓶頸</em>。",
+      "hero.lede":"我們為歐美中小企業提供按時計費的資訊工程能力——免去全職雇用的成本與等待,從緊急修復到流程自動化,把技術阻礙轉為可衡量的成果。",
+      "hero.cta.primary":"預約 30 分鐘討論",
+      "hero.cta.secondary":"服務範圍",
+      "hero.meta.1":"按時計費",
+      "hero.meta.2":"無長期綁約",
+      "hero.meta.3":"美/歐工時重疊",
+      "hero.meta.4":"新創與中小企業友善",
+
+      "hv.1.label":"需求分流",
+      "hv.2.label":"事故修復",
+      "hv.3.label":"CRM 自動化",
+      "hv.4.label":"API 整合",
+      "hv.5.label":"週度移交",
+      "hv.status":"交付中",
+
+      "sec.services.kicker":"服務",
+      "sec.services.title":"為中小企業而生的<em>按時計費</em>工程服務",
+      "sec.services.sub":"我們不接整季承包,不推大型改造。專注在一週內能被看見、能被衡量的交付。",
+
+      "svc.1.title":"快速問題排解",
+      "svc.1.desc":"排除正式環境事故、解除開發卡點、穩定關鍵流程,先把火滅掉。",
+      "svc.1.b1":"生產環境事故",
+      "svc.1.b2":"舊系統解鎖",
+      "svc.1.b3":"效能分流",
+
+      "svc.2.title":"流程自動化",
+      "svc.2.desc":"把 CRM、客服、報表、內部工具之間的重複操作自動化,讓團隊從手工勞動中釋放出來。",
+      "svc.2.b1":"CRM 與客服流程",
+      "svc.2.b2":"報表管線",
+      "svc.2.b3":"內部工具",
+
+      "svc.3.title":"產品與整合交付",
+      "svc.3.desc":"打造直接支撐營收與效率的功能、API 與第三方整合——務實、夠用、可維護。",
+      "svc.3.b1":"功能交付",
+      "svc.3.b2":"API 與 Webhook",
+      "svc.3.b3":"第三方整合",
+
+      "sec.process.kicker":"合作流程",
+      "sec.process.title":"一個短、透明、<em>可驗收</em>的合作循環。",
+      "sec.process.sub":"從第一次通話到交付結束,你隨時都知道我們在做什麼、還剩多少小時。",
+
+      "step.1.title":"探索",
+      "step.1.desc":"了解業務痛點、現有技術堆疊與緊急程度,判斷是否真的是我們能解的問題。",
+      "step.2.title":"時數估算",
+      "step.2.desc":"以小時為單位估算工作量,提出一份透明、可對照的執行計畫。",
+      "step.3.title":"執行",
+      "step.3.desc":"以短週期交付,每週能看到實際進展與可用成果,而不是只有週報。",
+      "step.4.title":"移交",
+      "step.4.desc":"留下文件與下一步建議,必要時提供後續維運支援,讓你的團隊能接手。",
+
+      "sec.why.kicker":"為何選我們",
+      "sec.why.title":"用<em>更少的承諾</em>,換取更高的執行確定性。",
+      "sec.why.sub":"你不需要多聘一位工程師,也不需要等三個月的招募循環。你只需要有人把事情做完。",
+
+      "val.1.title":"天數而非季度",
+      "val.1.desc":"把積壓需求從 backlog 推到 shipped,以天為單位,不是以 quarter 為單位。",
+      "val.2.title":"一日內回覆計畫",
+      "val.2.desc":"告訴我們最卡的一兩件事,我們會在 24 小時內提出可執行的時數方案。",
+      "val.3.title":"商業優先",
+      "val.3.desc":"每一小時都對應到投資回報、風險降低或營運影響——我們不為技術炫技。",
+
+      "sec.faq.kicker":"常見問題",
+      "sec.faq.title":"常見問題",
+      "sec.faq.sub":"選擇按時計費的夥伴前,這些是你該先釐清的事。",
+
+      "faq.1.q":"合作的最小規模是多少?",
+      "faq.1.a":"通常從 10 小時起,適合一次性的修復或小型自動化;若是整合或功能交付,多半落在 40–80 小時的區間。無最低月費、無長期綁約。",
+      "faq.2.q":"你們在哪些技術堆疊上工作?",
+      "faq.2.a":"主流 Web 與雲端技術:Node、Python、TypeScript、Postgres、AWS/GCP、常見 SaaS 的 API(HubSpot、Stripe、Notion、Zapier、Airtable 等)。不熟的技術會在探索階段直接告訴你。",
+      "faq.3.q":"時區怎麼運作?",
+      "faq.3.a":"我們與美東、美西、中西歐商務時段都有每日重疊視窗。緊急案件可安排同步會議,一般執行以非同步方式進行,確保你的團隊不被會議綁架。",
+      "faq.4.q":"時數如何追蹤與回報?",
+      "faq.4.a":"每週提供時數明細與對應交付項目,任何異常在超出預估 15% 前會先告知,絕不事後追加費用。",
+      "faq.5.q":"有 NDA 與資安要求嗎?",
+      "faq.5.a":"可簽署客戶 NDA 或採用我們的標準版本;憑證以最小權限原則授權,專案結束後清除。如需符合 SOC2/GDPR 對應流程,請在探索階段告知。",
+
+      "cta.title":"不想承擔全職工程成本,<br/>又需要技術火力?",
+      "cta.sub":"告訴我們你最卡的一到兩件事。我們會在 24 小時內回覆一份按時數計算的行動方案。",
+      "cta.primary":"開始合作",
+      "cta.secondary":"寄信給我們",
+
+      "foot.services":"服務",
+      "foot.company":"關於",
+      "foot.contact":"聯絡",
+      "foot.tag":"為北美與歐洲中小企業而生的按時計費工程夥伴。",
+      "foot.hours":"美/歐工時重疊",
+      "foot.built":"Built for SMBs in NA & EU"
+    },
+    en: {
+      "brand.tag":"FDE",
+      "nav.services":"Services",
+      "nav.process":"How we work",
+      "nav.why":"Why us",
+      "nav.faq":"FAQ",
+
+      "hero.eyebrow":"Hourly · Flexible · SMB-focused",
+      "hero.h1":"Ship faster. Clear the <em>real</em> bottlenecks in your business.",
+      "hero.lede":"On-demand engineering execution for US & EU SMBs — without the cost or delay of a full-time hire. From urgent fixes to workflow automation, we turn technical blockers into measurable outcomes.",
+      "hero.cta.primary":"Book a 30-min call",
+      "hero.cta.secondary":"See service scope",
+      "hero.meta.1":"Hourly engagement",
+      "hero.meta.2":"No long-term lock-in",
+      "hero.meta.3":"US / EU hours overlap",
+      "hero.meta.4":"Startup & SMB friendly",
+
+      "hv.1.label":"Ticket triage",
+      "hv.2.label":"Incident fix",
+      "hv.3.label":"CRM automation",
+      "hv.4.label":"API integration",
+      "hv.5.label":"Weekly handover",
+      "hv.status":"shipping",
+
+      "sec.services.kicker":"Services",
+      "sec.services.title":"<em>Hourly</em> engineering, purpose-built for small teams.",
+      "sec.services.sub":"No quarterly retainers. No giant rewrites. We focus on work that is visible and measurable within a week.",
+
+      "svc.1.title":"Rapid problem solving",
+      "svc.1.desc":"Debug production incidents, remove blockers, and stabilize the workflows you depend on.",
+      "svc.1.b1":"Production incident",
+      "svc.1.b2":"Legacy unblock",
+      "svc.1.b3":"Performance triage",
+
+      "svc.2.title":"Workflow automation",
+      "svc.2.desc":"Automate the repetitive work between CRM, support, reporting, and internal tools — and get your team out of copy-paste.",
+      "svc.2.b1":"CRM & support ops",
+      "svc.2.b2":"Reporting pipelines",
+      "svc.2.b3":"Internal tooling",
+
+      "svc.3.title":"Product & integration delivery",
+      "svc.3.desc":"Ship the features, APIs, and integrations that directly support revenue and efficiency — pragmatic, maintainable, done.",
+      "svc.3.b1":"Feature shipping",
+      "svc.3.b2":"API & webhooks",
+      "svc.3.b3":"3rd-party integration",
+
+      "sec.process.kicker":"How we work",
+      "sec.process.title":"A short, transparent, <em>verifiable</em> delivery loop.",
+      "sec.process.sub":"From first call to handover, you always know what we are doing and how many hours are left.",
+
+      "step.1.title":"Discovery",
+      "step.1.desc":"Understand the business pain, the current stack, and the urgency — and whether this is even the right problem to solve.",
+      "step.2.title":"Scope by hours",
+      "step.2.desc":"Estimate effort in hours and propose a transparent plan you can compare against reality.",
+      "step.3.title":"Execution",
+      "step.3.desc":"Deliver in short cycles with visible progress each week — usable output, not just status updates.",
+      "step.4.title":"Handover",
+      "step.4.desc":"Leave behind docs, next actions, and optional ongoing support so your team can take over.",
+
+      "sec.why.kicker":"Why JinShock",
+      "sec.why.title":"<em>Less commitment.</em> More execution certainty.",
+      "sec.why.sub":"You do not need another full-time engineer. You do not need a three-month hiring cycle. You need someone to get it done.",
+
+      "val.1.title":"Days, not quarters",
+      "val.1.desc":"We move work from backlog to shipped in days, not quarters — and you only pay for the hours it takes.",
+      "val.2.title":"Plan within 24 hours",
+      "val.2.desc":"Tell us your top one or two blockers. We reply with an actionable, hour-based plan within a business day.",
+      "val.3.title":"Business first",
+      "val.3.desc":"Every hour maps to ROI, risk reduction, or operational impact. We do not optimize for technical vanity.",
+
+      "sec.faq.kicker":"FAQ",
+      "sec.faq.title":"Frequently asked questions",
+      "sec.faq.sub":"A few things worth clarifying before hiring an hourly partner.",
+
+      "faq.1.q":"What is the minimum engagement size?",
+      "faq.1.a":"Usually 10 hours — enough for a targeted fix or small automation. Integrations or feature work typically land in the 40–80 hour range. No monthly minimum, no long-term lock-in.",
+      "faq.2.q":"What stacks do you work in?",
+      "faq.2.a":"Mainstream web and cloud: Node, Python, TypeScript, Postgres, AWS/GCP, plus common SaaS APIs (HubSpot, Stripe, Notion, Zapier, Airtable, etc.). If something is outside our comfort zone, we will say so during discovery.",
+      "faq.3.q":"How do time zones work?",
+      "faq.3.a":"We have daily overlap windows with US East, US West, and Central/Western European business hours. Sync meetings are available for urgent work; most execution runs async so your team is not held hostage by meetings.",
+      "faq.4.q":"How are hours tracked and reported?",
+      "faq.4.a":"Weekly statements list hours against concrete deliverables. If anything trends past estimate, we flag it before it exceeds 15% — never a surprise invoice.",
+      "faq.5.q":"What about NDAs and security?",
+      "faq.5.a":"We sign your NDA or ours. Credentials are granted on a least-privilege basis and revoked at the end of the engagement. Tell us up front if SOC2 or GDPR alignment matters.",
+
+      "cta.title":"Need engineering firepower <br/>without full-time overhead?",
+      "cta.sub":"Tell us your top one or two blockers. We will reply with an hour-based action plan within 24 hours.",
+      "cta.primary":"Start with JinShock",
+      "cta.secondary":"Email us",
+
+      "foot.services":"Services",
+      "foot.company":"Company",
+      "foot.contact":"Contact",
+      "foot.tag":"An hourly engineering partner built for SMBs in North America and Europe.",
+      "foot.hours":"US / EU hours overlap",
+      "foot.built":"Built for SMBs in NA & EU"
+    }
+  };
+
+  const root = document.documentElement;
+
+  function applyLang(lang){
+    root.setAttribute('lang', lang === 'zh' ? 'zh-Hant' : 'en');
+    const d = dict[lang];
+    document.querySelectorAll('[data-i18n]').forEach(el=>{
+      const k = el.getAttribute('data-i18n');
+      if(d[k] != null) el.textContent = d[k];
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach(el=>{
+      const k = el.getAttribute('data-i18n-html');
+      if(d[k] != null) el.innerHTML = d[k];
+    });
+    // Update title
+    document.title = lang === 'zh'
+      ? 'JinShock FDE — Forward Deployed Engineer'
+      : 'JinShock FDE — Forward Deployed Engineer';
+
+    // Toggle state
+    document.querySelectorAll('.lang button').forEach(b=>{
+      b.classList.toggle('is-active', b.dataset.lang === lang);
+    });
+
+    try{ localStorage.setItem('jinshock.lang', lang); }catch(e){}
+  }
+
+  // Init
+  let initial = 'zh';
+  try{
+    const saved = localStorage.getItem('jinshock.lang');
+    if(saved === 'en' || saved === 'zh') initial = saved;
+  }catch(e){}
+  applyLang(initial);
+
+  document.querySelectorAll('.lang button').forEach(b=>{
+    b.addEventListener('click', ()=> applyLang(b.dataset.lang));
+  });
+
+  // Scroll reveal
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('[data-reveal]').forEach(el=>io.observe(el));
+
+  // Smooth anchor
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click', e=>{
+      const id = a.getAttribute('href');
+      if(id.length > 1){
+        const el = document.querySelector(id);
+        if(el){
+          e.preventDefault();
+          window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 60, behavior:'smooth' });
+        }
+      }
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
